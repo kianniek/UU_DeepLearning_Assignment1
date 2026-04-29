@@ -1,9 +1,10 @@
-\documentclass[a4paper, 12pt]{article}
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Math, plots and sketches
-\usepackage{amsmath, mathtools, amsfonts}
+\usepackage{amsmath, mathtools, amsfonts, amssymb}
 \usepackage{tkz-euclide}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
@@ -16,27 +17,20 @@
 \def\UrlBreaks{\do\/\do-\do\_\do\#\do\0\do\1\do\2\do\3\do\4\do\5\do\6\do\7\do\8\do\9}
 
 % Formatting
-\usepackage[left=1in, right=1in, top=1.2in, bottom=1.2in]{geometry}
 \usepackage{dirtytalk} % Proper quotation marks
 \usepackage{float} % Make it possible for tables (and images) to be placed in an explicit location (using [H])
-
+\usepackage{algorithmic}
+\usepackage{textcomp}
 
 % Colors for highlighting and coloring tables
 \usepackage{color, soul}
 \usepackage[table]{xcolor}
-
-% Multicolumn formatting
-% In case that's the format we want
-%\usepackage{multicols}
 
 % Custom labeled lists
 \usepackage{enumerate}
 
 % Clickable references
 \usepackage{hyperref}
-% Source - https://tex.stackexchange.com/a/51349
-% Posted by Canageek, modified by community. See post 'Timeline' for change history
-% Retrieved 2026-03-23, License - CC BY-SA 4.0
 \hypersetup{
   colorlinks   = true, %Colours links instead of ugly boxes
   urlcolor     = blue, %Colour for external hyperlinks
@@ -49,26 +43,49 @@
 \usepackage{todonotes}
 
 % References
-\usepackage{biblatex}
-\addbibresource{references.bib}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\title{Assignment 1 Deep Learning Group 33}
-
-\author{Kian Niek Hamidi Abd Abad (Student ID), Márton Mohácsi (Student ID), Sid Pranjale (Student ID), Jorik Roebroek (Student ID)}
-
-\date{ \today }
+\usepackage{cite}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
+
+\title{Assignment 1: Deep Learning}
+
+\author{\IEEEauthorblockN{1\textsuperscript{st} Kian Niek Hamidi Abd Abad}
+\IEEEauthorblockA{\textit{Utrecht University} \\
+Utrecht, Netherlands \\
+Student ID}
+\and
+\IEEEauthorblockN{2\textsuperscript{nd} Márton Mohácsi}
+\IEEEauthorblockA{\textit{Utrecht University} \\
+Utrecht, Netherlands \\
+Student ID}
+\and
+\IEEEauthorblockN{3\textsuperscript{rd} Sid Pranjale}
+\IEEEauthorblockA{\textit{Utrecht University} \\
+Utrecht, Netherlands \\
+Student ID}
+\and
+\IEEEauthorblockN{4\textsuperscript{th} Jorik Roebroek}
+\IEEEauthorblockA{\textit{Utrecht University} \\
+Utrecht, Netherlands \\
+Student ID}
+}
+
 \maketitle
 
-\tableofcontents
+\begin{abstract}
+This document outlines the methodology and model selection process for predicting time-series data using neural networks in Deep Learning Assignment 1.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Deep Learning, Neural Networks, Time Series Forecasting
+\end{IEEEkeywords}
+
+\section{Introduction}
 
 \noindent\fbox{
-  \begin{minipage}{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}
+  \begin{minipage}{\dimexpr\columnwidth-2\fboxsep-2\fboxrule\relax}
     \textbf{Assignment:} 
     \begin{enumerate}[(a)]
       \item Select your choice of neural networks model that is suitable for this task and motivate it. Train your model to predict one step ahead data point, during training (see following Figure). Scale your data before training and scale them back to be able to compare your predictions with real measurements.
@@ -82,5 +99,7 @@
 \section{Choice of Neural Networks Model}
 We have chosen to implement the [Insert Name of Neural Network Model] for our deep learning assignment. This model is well-suited for [briefly explain why this model is appropriate for the task at hand]. The architecture of this model allows it to effectively capture [mention specific features or patterns relevant to the task], making it a strong candidate for achieving high performance on our dataset.
 
+\bibliographystyle{IEEEtran}
+\bibliography{references}
 
 \end{document}
