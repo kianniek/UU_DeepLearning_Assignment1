@@ -67,5 +67,5 @@ desktop.ini
 # *.h5
 # *.hdf5
 # *.ckpt
-# data/
+data/
 # models/
