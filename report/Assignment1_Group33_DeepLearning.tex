@@ -1,0 +1,238 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Math, plots and sketches
+\usepackage{amsmath, mathtools, amsfonts, amssymb}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\usepackage{verbatim}
+\pgfplotsset{compat=1.18}
+
+% Images
+\usepackage{graphicx}
+
+% Allow line-breaking URLs/paths in text
+\usepackage{url}
+\def\UrlBreaks{\do\/\do-\do\_\do\#\do\0\do\1\do\2\do\3\do\4\do\5\do\6\do\7\do\8\do\9}
+
+% Formatting
+\usepackage{dirtytalk} % Proper quotation marks
+\usepackage{float} % Make it possible for tables (and images) to be placed in an explicit location (using [H])
+\usepackage{algorithmic}
+\usepackage{textcomp}
+
+% Colors for highlighting and coloring tables
+\usepackage{color, soul}
+\usepackage[table]{xcolor}
+
+% Custom labeled lists
+\usepackage{enumerate}
+
+% Clickable references
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks   = true, %Colours links instead of ugly boxes
+  urlcolor     = blue, %Colour for external hyperlinks
+  linkcolor    = blue, %Colour of internal links
+  citecolor   = red %Colour of citations
+}
+
+% Comments
+\usepackage{comment}
+\usepackage{todonotes}
+
+% References
+\usepackage{cite}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\title{Assignment 1: Deep Learning}
+
+\author{\IEEEauthorblockN{1\textsuperscript{st} Kian Niek Hamidi Abd Abad}
+\IEEEauthorblockA{\textit{Utrecht University} \\
+Utrecht, Netherlands \\
+0609927}
+\and
+\IEEEauthorblockN{2\textsuperscript{nd} Márton Mohácsi}
+\IEEEauthorblockA{\textit{Utrecht University} \\
+Utrecht, Netherlands \\
+1621106}
+\and
+\IEEEauthorblockN{3\textsuperscript{rd} Sid Pranjale}
+\IEEEauthorblockA{\textit{Utrecht University} \\
+Utrecht, Netherlands \\
+4368959}
+\and
+\IEEEauthorblockN{4\textsuperscript{th} Jorik Roebroek}
+\IEEEauthorblockA{\textit{Utrecht University} \\
+Utrecht, Netherlands \\
+9490466}
+}
+
+\maketitle
+
+\begin{abstract}
+This document outlines the methodology and model selection process for predicting time-series data using neural networks in Deep Learning Assignment 1.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Deep Learning, Neural Networks, Time Series Forecasting
+\end{IEEEkeywords}
+
+\section{Introduction}
+The problem we were asked to solve was predicting laser measurements on a real-life dataset, visiualized in Figure \ref{fig:training_data}. This involved predicting the next measurement based on the sequence of the previous $N$ measurements. The sequence of $N$ values that are used as an input will be referred to as a window from now on. This can be seen illustrated in Figure \ref{fig:data_prediction_illustration}.
+
+\begin{figure} [h]
+    \centering
+    \includegraphics[width=0.75\linewidth]{dataPredictionVisualization.png}
+    \caption{Illustration of the inputs and outputs of the windowed prediction}
+    \label{fig:data_prediction_illustration}
+\end{figure}
+
+To solve this problem we had to find one or more neural network architectures to use. Then different window sizes had to be tried to find the best solution. 
+
+The models were tested on predicting the next 200 data points recursively, by feeding the outputs of it into the input of the next step. 
+
+<TALK ABOUT THE SOLUTION WE FOUND AT THE END?>
+
+\begin{comment}
+\noindent\fbox{
+  \begin{minipage}{\dimexpr\columnwidth-2\fboxsep-2\fboxrule\relax}
+    \textbf{Assignment:} 
+    
+    The data we had to predict was a real-life dataset of laser measurements.
+    \begin{enumerate}[(a)]
+      \item Select your choice of neural networks model that is suitable for this task and motivate it. Train your model to predict one step ahead data point, during training (see following Figure). Scale your data before training and scale them back to be able to compare your predictions with real measurements.
+      \item How many past time steps should you input into your network to achieve the best possible performance? (Hint: This is a tunable parameter and needs to be tuned).
+      \item Once your model is trained, use it to predict the next 200 data points recursively. This means feeding each prediction back into the model to generate the subsequent predictions.
+      \item On May 8th, download the real test dataset and evaluate your model by reporting both the Mean Absolute Error (MAE) and Mean Squared Error (MSE) between its predictions and the actual test values.  Additionally, create a plot comparing the predicted and real values to visually assess your model’s performance
+    \end{enumerate}
+  \end{minipage}
+}\newline
+\end{comment}
+
+\section{Used Models}
+\begin{comment}We have chosen to implement the [Insert Name of Neural Network Model] for our deep learning assignment. This model is well-suited for [briefly explain why this model is appropriate for the task at hand]. The architecture of this model allows it to effectively capture [mention specific features or patterns relevant to the task], making it a strong candidate for achieving high performance on our dataset.
+\end{comment}
+We developed a MLP, CNN, and RNN(LSTM) model in parallel to see which showed the most promise for solving this task.
+
+\subsection{MLP}
+The MLP (Multi-layer peceptrons) model is conceptually the simplest model, but can achieve relatively good results. We chose it because it is simple to implement and requires relatively few design choices and hyper-parameters. Its main downside is that the number of parameters quickly increases for larger input and layer sizes, which means that the window size has to be quite small for this model. This will likely result in the model not being able to fully capture the largest recurring pattern in the data.
+
+\subsection{CNN}
+We also tried an approach with a simple CNN (Convolutional Neural Network) model. We chose this model because it solves the problem of the MLP with the small window size, as a convolution kernel with a smaller number of parameters is used instead of some of the fully connected layers, allowing for larger window sizes. While CNNs do not have a special quality with regard to time-series data, we hoped that the model would be able to extract the different patterns of the data, like the oscillation, growing amplitude, and regular collapse.
+
+\subsection{LSTM}
+\label{Used Models - LSTM}
+Finally, we made an LSTM (Long Short-Term Memory) model, which we initially chose because of its ability to work well with time-series related data. Initially the results of this network were great when predicting in the same time frame of the training data. However having the model predict the data after the time frame of the training data it quickly stagnated in amplitude so we did not see the macro movement of the amplitude of the data over longer periods of time present in a visualization of the data in figure \ref{fig:training_data}
+
+\begin{figure} [h]
+    \centering
+    \includegraphics[width=0.75\linewidth]{visualizationOfTrainingData.png}
+    \caption{Training Data Visualized in a graph with time step on the X axis and measurement value on the Y axis}
+    \label{fig:training_data}
+\end{figure}
+
+To make the model be better at adapting to the macro shape of the data we added a singular convolutional layer to help the model capture the macro shape. 
+
+\begin{figure} [h]
+    \centering
+    \includegraphics[width=\linewidth]{LSTM_CNN_Model_Visualization.pdf}
+    \caption{Visualization of the LSTM network with the convolution layer}
+    \label{fig:lstm_cnn_model_visualization}
+\end{figure}
+
+\section{Approach}
+
+\subsection{Data}
+% Methodology, technical details and choices made
+
+The measurements contained 1000 instances of sequential data, between the values of 0 and 260. This can be seen in Figure \ref{fig:training_data}. Since we only had a limited number of measurements, and we did not know how big these values might get, we decided to normalize the values with 300 as a default.
+
+Then datasets of different window sizes were created. This was done by taking a data point and the $N$ values preceding it and pairing them up. These were saved, and loaded depending on the window size that was to be tried out. In the case of a window size of $N$ and a data point at time $t$, where $t < N$ the data point was not used for either validation or training.
+
+The data contains three major growing phases and two collapses. Having a validation set that is the sequence of paired data could lead to only having samples in one of the growing phases and completely missing the collapses. This would prevent the model from converging correctly since the validation set would not have data that is general for the dataset. Because of this the training and validation sets were created by randomly splitting the paired data.
+
+\subsection{MLP}
+For the MLP model, we trained for a maximum of 300 epochs with a batch size of 32 and learning rate of 0.001, using MSE loss and the Adam optimizer. We chose MSE over MAE, as it penalizes larger differences more, which will put more pressure on the model to learn the amplitude collapses in the data. We also employed an early stopping mechanism on the loss of the validation set, with a patience of 8. The model itself consists of 4 fully-connected layers, including input and output:
+\begin{itemize}
+    \item Input: size 32 (The final window size)
+    \item Hidden layer 1: size 64
+    \item Hidden layer 2: size 32
+    \item Output: size 1
+\end{itemize}
+
+Since the available training data is very limited, we wanted to keep the model very small, thus opting for only two hidden layers. We tried several different sizes for the hidden layers, finding that the current configuration produced the best results. Likewise, we tested window sizes from 16 to 128 in powers of 2, finding that 32 performed best. Larger window sizes were shortly looked at, but resulted in the model failing to properly converge during training.
+
+\subsection{CNN}
+For the CNN model, we used the same training method as the MLP. The model itself is structured as follows:
+\begin{itemize}
+    \item Convolution layer 1: input 64x1, \#filters 16, kernel 15
+    \item Convolution layer 2: input 50x16, \#filters 16, kernel 15
+    \item FC output layer: size 1
+\end{itemize}
+Initially our CNN model only contained a single convolution layer, but the training loss was quite high, and the best value for the kernel size ended up being the size of the input, which means it essentially functioned as a large MLP at that point. Adding a second convolution layer greatly improved the results with small kernel sizes. For simplicity, we kept the same kernel size and number of filters for both convolutional layers.
+While for this model was to be able to handle bigger window sizes than the MLP, the model still failed to converge when the window size was above 100. The optimal window size we found was 64.
+
+\subsection{The CNN-LSTM Approach}
+
+As mentioned in \ref{Used Models - LSTM} the proposed architecture utilizes a CNN-LSTM model designed to process sequential data. The overall training configuration is set to run for 100 epochs with a batch size of 32 and a learning rate of 0.001, utilizing a CUDA-enabled GPU for accelerated computation.
+
+The model's data pipeline and layer architecture are structured as follows:
+
+\begin{itemize}
+    \item \textbf{Input Representation:} The network ingests the initial data as a tensor of shape $(B, T, 1)$ where $B$ is the batch which is the number of separate sequences processed at once, $T$ is the time which is the number of observations per sequence and, the 1 stands for the the $C$ which is the Feature which is the number of variables measured at each observation. Based on the implementation, the sequence length ($T$) is defined as 210, and the batch size ($B$) is set to 32.
+    \item \textbf{Convolutional Feature Extraction:} To capture local patterns, the input tensor is first permuted to the shape $(B, 1, T)$. It is then passed through a 1D Convolutional layer (Conv1D) that utilizes a kernel size of $k=3$ and a padding of $p=1$. This convolution maps the single input channel to 16 output channels and is immediately followed by a ReLU activation function.
+    \item \textbf{LSTM Processing:} Following feature extraction, the tensor is permuted back to $(B, T, 16)$ to serve as a valid sequence for the recurrent layers. The data is processed by a Long Short-Term Memory (LSTM) network consisting of 2 layers and a hidden size of 64. This stage yields an intermediate output tensor of shape $(B, T, 64)$.
+    \item \textbf{Prediction and Output:} To formulate the final prediction, the model extracts the LSTM output from the final time step (\texttt{out[:, -1, :]}), effectively reducing the tensor dimensions to $(B, 64)$. Finally, a Fully Connected (Linear) layer maps the 64 hidden units to a single output, resulting in the final prediction shape of $(B, 1)$.
+\end{itemize}
+
+This was roughly inspired by the work of Abumohse M. et al.\cite{ABUMOHSEN2024100636}
+
+A critical component of the methodology involved tuning the window size ($N$). We conducted a parametric sweep of $N$ values ranging from 200 to the total length of the dataset in increments of 25. This was necessary because a window that is too short fails to capture the "collapse" cycles, while a window that is too large reduces the number of available training samples. The final recursive evaluation demonstrates that a balanced sequence length allows the model to maintain the signal's structural integrity over a 1,000-step horizon.
+
+\section{Results}
+% Qualitative and quantitative analysis 
+The models' performance was evaluated using two primary metrics: Mean Squared Error (MSE) and Mean Absolute Error (MAE). 
+
+\begin{figure} [h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{prediction_testdata_historicaldata.png}
+    \caption{Recursive Prediction integrated with training Data (in blue). The vertical dashed line at $t=1000$ marks the transition from training (historical) observations to the recursive forecast, demonstrating the model's ability to maintain oscillating patterns over a longer time period.}
+    \label{fig:recursive_forecast}
+\end{figure}
+
+\begin{figure} [h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{predicted_vs_real_values.png}
+    \caption{Visual comparison of Model Predictions against Actual Test Values over 200 time steps. The model closely tracks the periodic peaks, though it exhibits slight overestimation in the latter half of the test sequence.}
+    \label{fig:pred_vs_real}
+\end{figure}
+
+\subsection{Choice of model}
+Comparing the results of the different models, we found that the MLP and CNN failed to properly capture the period of the large collapse pattern in the data. Both models tend to collapse by a smaller degree and therefore repeated the collapse too frequently. The CNN-LSTM model was able to predict this much better. Therefore, we continued with this model for the final evaluation on the Test set. 
+
+\subsection{Training Convergence}
+Training was conducted over 100 epochs. As shown in the loss curves, both training and validation loss converged rapidly, with MSE values stabilizing below $10^{-3}$ after normalization. The use of a random split for validation prevented the model from overfitting to a specific growth phase, allowing it to accurately predict the "collapse" events seen in the training data.
+
+\subsection{1-Step Ahead vs. Recursive Forecasting}
+In 1-step ahead prediction, the model tracked the actual laser measurements with high fidelity, achieving an overlay that was nearly indistinguishable from the ground truth. 
+
+However, the recursive forecasting task (predicting 200-1,000 steps into the future) proved more challenging. In this mode, errors accumulated at each step. Models with shorter window sizes tended to converge toward a mean value (stagnation), whereas the optimized CNN-LSTM with a larger window size successfully replicated the oscillatory nature and the increasing amplitude of the signal. 
+
+\subsection{Final Evaluation}
+Upon testing against the hidden test set released on May 8th, the model achieved an MSE of $815.1715$ and an MAE of $20.7715$. The visual comparison confirms that the CNN filters effectively pre-processed the signal, allowing the LSTM layers to maintain the periodicity of the laser pulses over the required 200-step horizon.
+
+\section{Conclusion}
+% Summary of your findings
+In this assignment, we developed a hybrid CNN-LSTM model to forecast non-stationary laser measurement data. Our findings indicate that while LSTMs are proficient at capturing temporal dependencies, the addition of a 1D-Convolutional layer significantly improves the model's ability to extract macro-level patterns from noisy sequences. Furthermore, we demonstrated that the choice of window size is paramount for recursive forecasting; a window that encompasses at least one full cycle of the growth-and-collapse pattern is required to prevent the model from stagnating. Future work could explore the use of Attention mechanisms to further refine the focus on critical transition points in the data.
+
+\nocite{*}
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
