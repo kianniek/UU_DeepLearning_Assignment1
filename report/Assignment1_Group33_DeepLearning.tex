@@ -218,6 +218,14 @@ Comparing the results of the different models, we found that the MLP and CNN fai
 \subsection{Training Convergence}
 Training was conducted over 100 epochs. As shown in the loss curves, both training and validation loss converged rapidly, with MSE values stabilizing below $10^{-3}$ after normalization. The use of a random split for validation prevented the model from overfitting to a specific growth phase, allowing it to accurately predict the "collapse" events seen in the training data.
 
+\begin{figure} [h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{loss_curve.png} % Adjusted width for better visibility
+    \caption{Training and validation Mean Squared Error (MSE) loss over 100 epochs. The convergence of both metrics near zero suggests stable learning and effective generalization.}
+    \label{fig:loss-convergence-analysis}
+\end{figure}
+
+
 \subsection{1-Step Ahead vs. Recursive Forecasting}
 In 1-step ahead prediction, the model tracked the actual laser measurements with high fidelity, achieving an overlay that was nearly indistinguishable from the ground truth. 
 
